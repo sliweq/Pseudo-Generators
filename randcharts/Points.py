@@ -1,13 +1,13 @@
 class Points():
-    def __init__(self, amount) -> None:
+    def __init__(self, amount):
         self.points = []
         self.amount = amount
     
-    def getRandomNumber(self, x):
-        m = 1000 #the modulus
-        a = 2 # the multiplier 
-        c = 0 # the increment
-        seed = 69 
+    def linearCongruentialGenerator(self, x):
+        m = 257  #the modulus
+        a = 75 # the multiplier 
+        c = 74 # the increment
+        seed = 2 
         
         if(x == None):
             return ((a*seed + c)%m)
@@ -17,13 +17,14 @@ class Points():
     def createRandomPoints(self):
         x = None
         for i in range(0,self.amount):
-            tmp1 = self.getRandomNumber(x)
-            tmp2 = self.getRandomNumber(tmp1)
-            tmp3 = self.getRandomNumber(tmp2)
+            tmp1 = self.linearCongruentialGenerator(x)
+            tmp2 = self.linearCongruentialGenerator(tmp1)
+            tmp3 = self.linearCongruentialGenerator(tmp2)
             x = tmp3
             self.points.append((tmp1,tmp2,tmp3))
             
     def getPointsArray(self):
+        self.createRandomPoints()
         return self.points
             
             
