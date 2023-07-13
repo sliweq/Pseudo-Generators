@@ -141,8 +141,9 @@ class Main():
             
     
 if(__name__ == "__main__"):
+    # self, amount, option, modulo, a, c, seed
     points = []
-    p = Points(100)
+    p = Points(100,4,257,75, 74, 2137)
     points = p.getPointsArray()
     #print(points)
     main = Main(points)

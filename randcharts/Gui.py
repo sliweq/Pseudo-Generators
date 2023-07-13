@@ -58,4 +58,8 @@ class Gui():
         self.window.mainloop()
         
 g = Gui()
+seed  = 2137
+tmp = 2
+tmp = (seed%(10**(len(str(seed))-1)))*10 + tmp
+print(tmp)
 g.run()
