@@ -144,7 +144,7 @@ if(__name__ == "__main__"):
     points = []
     p = Points(100)
     points = p.getPointsArray()
-    print(points)
+    #print(points)
     main = Main(points)
     
     main.run()

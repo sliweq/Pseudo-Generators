@@ -25,6 +25,7 @@ class Points():
             
     def getPointsArray(self):
         self.createRandomPoints()
+        self.points = list(set(self.points))
         return self.points
             
             
