@@ -145,16 +145,15 @@ class Main():
 if(__name__ == "__main__"):
     g = Gui()
     tmp = g.run()
-    # self, amount, option, modulo, a, c, seed
     
-    #TODO fix forced exit 
-    points = []
-    p = Points(100,tmp[0],tmp[2],tmp[3],tmp[4],tmp[1])
-    points = p.getPointsArray()
-    print(points)
-    main = Main(points)
-    
-    main.run()
+    if(tmp != None):
+        points = []
+        p = Points(100,tmp)
+        points = p.getPointsArray()
+        print(points)
+        main = Main(points)
+        
+        main.run()
     
     
     

@@ -1,12 +1,15 @@
 class Points():
-    def __init__(self, amount, option, modulo, a, c, seed):
+    def __init__(self, amount, tmp):
+        #self.generator_box.get())+1,self.seed_entry.get(),self.modulo_entry.get(),self.a_entry.get(),self.c_entry.get()]
+        self.tmp = tmp
+        
         self.points = []
         self.amount = int(amount)
-        self.option = option
-        self.modulo = modulo
-        self.a = a #in middle square it is used as number of digits #j
-        self.c = c #k
-        self.seed = seed
+        self.option = tmp[0]
+        self.modulo = tmp[2]
+        self.a = tmp[3] #in middle square it is used as number of digits #j
+        self.c = tmp[4] #k
+        self.seed = tmp[1]
             
     def getPointsArray(self):
         self.points.clear()

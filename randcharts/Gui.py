@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter.messagebox import showerror
+
 
 class Gui():
     def __init__(self):
@@ -12,7 +14,7 @@ class Gui():
         self.generators_names = ["Linear congruential","Middle square","Lehmer","Lagged Fibonacci"]
         self.describsions = [["seed","modulo-m","multiplier-a","increment-c"],["seed","","number of digits - a",""],["seed","modulo-m","multiplier-a",""],["seed","modulo-m","j","k"]]
         self.selecte_description = self.describsions[0]
-        self.returning_value = []
+        self.returning_value = None
     
     def labels(self):
         self.generator_label = ttk.Label(self.window, text="Generator")
@@ -52,16 +54,113 @@ class Gui():
         self.generate_button.grid(column=0, row=5,padx=10,pady=10,columnspan=3) # sticky="WENS"
 
     def action_button(self):
-        #TODO
-        #exceptions if wrong values
         print(f"{self.generator_box.get()} {self.seed_entry.get()} {self.a_entry.get()} {self.c_entry.get()}")
         
-        try:
+        msg = self.check_all_values()
+        if(msg == ""):
             self.generators_names.index(self.generator_box.get())
             self.returning_value = [self.generators_names.index(self.generator_box.get())+1,self.seed_entry.get(),self.modulo_entry.get(),self.a_entry.get(),self.c_entry.get()]
             self.window.destroy()
+        else:
+            showerror(title="Error", message=msg)
+                        
+    def check_all_values(self):
+        msg = ""
+        if(self.generator_box.get() == ""):
+            msg+="Choose generator\n"
+        else:
+            match (self.generators_names.index(self.generator_box.get())):
+                case 0:
+                    if(self.check_data(self.modulo_entry.get())):
+                        if(int(self.modulo_entry.get())<=0):
+                            msg += "Modulo is less or equal zero\n"
+                    else:
+                        msg+= "Invalid modulo data type\n"
+                        
+                    if(self.check_data(self.seed_entry.get())):
+                        if(int(self.seed_entry.get())<0):
+                            msg += "Seed is less than zero\n"
+                    else:
+                        msg+= "Invalid seed data type\n"
+                    
+                    if(self.check_data(self.a_entry.get())):
+                        if(int(self.a_entry.get())<0):
+                            msg += "A is less than zero\n"
+                    else:
+                        msg+= "Invalid A data type\n"
+                        
+                    if(self.check_data(self.c_entry.get())):
+                        if(int(self.c.get())<0):
+                            msg += "C is less than zero\n"
+                    else:
+                        msg+= "Invalid C data type\n"
+                    
+                case 1:
+                    if(self.check_data(self.seed_entry.get())):
+                        if(int(self.seed_entry.get())<0):
+                            msg += "Seed is less than zero\n"
+                    else:
+                        msg+= "Invalid seed data type\n"
+                        
+                    if(self.check_data(self.a_entry.get())):
+                        if(int(self.a_entry.get())<=0):
+                            msg += "A is less or equal 0 than zero\n"
+                    else:
+                        msg+= "Invalid A data type\n"
+                case 2:
+                    if(self.check_data(self.modulo_entry.get())):
+                        if(int(self.modulo_entry.get())<0):
+                            msg += "Modulo is less or equal zero\n"
+                    else:
+                        msg+= "Invalid modulo data type\n"
+                        
+                    if(self.check_data(self.seed_entry.get())):
+                        if(int(self.seed_entry.get())<0):
+                            msg += "Seed is less than zero\n"
+                    else:
+                        msg+= "Invalid seed data type\n"
+                    
+                    if(self.check_data(self.a_entry.get())):
+                        if(int(self.a_entry.get())<0):
+                            msg += "A is less than zero\n"
+                    else:
+                        msg+= "Invalid A data type\n"
+                case 3:
+                    if(self.check_data(self.modulo_entry.get())):
+                        if(int(self.modulo_entry.get())<0):
+                            msg += "Modulo is less or equal zero\n"
+                    else:
+                        msg+= "Invalid modulo data type\n"
+                        
+                    if(self.check_data(self.seed_entry.get())):
+                        if(int(self.seed_entry.get())<0):
+                            msg += "Seed is less than zero\n"
+                    else:
+                        msg+= "Invalid seed data type\n"
+                    
+                    if(self.check_data(self.a_entry.get())):
+                        if(int(self.a_entry.get())<0):
+                            msg += "J is less than zero\n"
+                    else:
+                        msg+= "Invalid J data type\n"
+                        
+                    if(self.check_data(self.c_entry.get())):
+                        if(int(self.c.get())<0):
+                            msg += "K is less than zero\n"
+                    else:
+                        msg+= "Invalid K data type\n"
+                
+        return msg
+        
+    def check_data(self,data):
+        if(data == ""):
+            return False
+        try:
+            int(data)
         except:
-            print("Xd")
+            return False
+        return True
+            
 
     def action_combobox(self,event):
         self.selecte_description = self.describsions[self.generators_names.index(self.generator_box.get())] 
@@ -87,4 +186,5 @@ class Gui():
         return self.returning_value
 
 #TODO label with generators patterns
+#TODO simulation settings
 
