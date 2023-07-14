@@ -10,4 +10,5 @@ Move:
 Rotations:
 (Z-axis) left, right
 (Y-axis) up, down
+
 *I didn't do X-axis because I think it's unnecessary. Y and Z is enough*
