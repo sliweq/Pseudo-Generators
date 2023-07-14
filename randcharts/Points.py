@@ -1,7 +1,7 @@
 class Points():
     def __init__(self, amount, option, modulo, a, c, seed):
         self.points = []
-        self.amount = amount
+        self.amount = int(amount)
         self.option = option
         self.modulo = modulo
         self.a = a #in middle square it is used as number of digits #j
@@ -18,19 +18,21 @@ class Points():
             case 3: 
                 self.create3()
             case 4:
-                self.create4
+                self.create4()
         self.points = list(set(self.points))
         return self.points
             
     #option 1
     def linearCongruentialGenerator(self, x):
-        if(x == None):
-            return ((self.a*self.seed + self.c)%self.modulo)
-        else: 
-            return ((self.a*x + self.c)%self.modulo) 
+        return ((self.a*x + self.c)%self.modulo) 
         
     def create1(self):
-        x = None
+        self.seed = int(self.seed)
+        self.a = int(self.a)
+        self.c = int(self.c)
+        self.modulo = int(self.modulo)
+        
+        x = self.seed 
         for i in range(0,self.amount):
             tmp1 = self.linearCongruentialGenerator(x)
             tmp2 = self.linearCongruentialGenerator(tmp1)
@@ -40,23 +42,19 @@ class Points():
             
     #option2
     def middleSquaregenerator(self, x):
-        if(x == None):
-            tmp = self.seed**2
-            if(len(str(tmp)) >= self.a):
-                tmp = str(tmp)
-                return int(tmp[(self.a-len(tmp))//2:((self.a-len(tmp)//2)+len(tmp)+1)])
-            else:
-                return tmp
+        tmp = x**2
+        if(len(str(tmp)) >= self.a):
+            tmp = str(tmp)
+            return int(tmp[(len(tmp)-self.a)//2:(((len(tmp)-self.a)//2)+self.a)])
         else:
-            tmp = x**2
-            if(len(str(tmp)) >= self.a):
-                tmp = str(tmp)
-                return int(tmp[(self.a-len(tmp))//2:((self.a-len(tmp)//2)+len(tmp)+1)])
-            else:
-                return tmp
+            return tmp
     
     def create2(self):
-        x = None
+        self.seed = int(self.seed)
+        self.amount = int(self.amount)
+        self.a = int(self.a)
+        
+        x = self.seed
         for i in range(0,self.amount):
             tmp1 = self.middleSquaregenerator(x)
             tmp2 = self.middleSquaregenerator(tmp1)
@@ -66,7 +64,13 @@ class Points():
     
     #option3
     def create3(self):
-        x = None
+        self.seed = int(self.seed)  
+        self.a = int(self.a)
+        self.modulo = int(self.modulo)
+        
+        
+        
+        x = self.seed
         for i in range(0,self.amount):
             tmp1 = self.lehmerCongruentialGenerator(x)
             tmp2 = self.lehmerCongruentialGenerator(tmp1)
@@ -75,38 +79,34 @@ class Points():
             self.points.append((tmp1,tmp2,tmp3))
             
     def lehmerCongruentialGenerator(self,x):
-        if(x == None):
-            return ((self.a*self.seed)%self.modulo)
-        else: 
-            return ((self.a*x)%self.modulo) 
+        return ((self.a*x)%self.modulo) 
         
     #option4
-    def create4(self,x):
-        x = None
+    def create4(self):
+        self.seed = int(self.seed)
+        self.a = int(self.a)
+        self.c = int(self.c)
+        self.modulo = int(self.modulo)
+        
+        x = [int(i) for i in str(self.seed)] 
         for i in range(0,self.amount):
             tmp1 = self.laggedFibonacciGenerator(x)
-            tmp2 = self.laggedFibonacciGenerator(tmp1)
-            tmp3 = self.laggedFibonacciGenerator(tmp2)
-            x = tmp3
-            self.points.append((tmp1,tmp2,tmp3))
+            tmp2 = self.laggedFibonacciGenerator(tmp1[1])
+            tmp3 = self.laggedFibonacciGenerator(tmp2[1])
+            x = tmp3[1]
+            self.points.append((tmp1[0],tmp2[0],tmp3[0]))
         
     def laggedFibonacciGenerator(self,x):
-        if(x == None):
-            if(len(str(self.seed)) >= max(self.a, self.c)):
-                #i chose addition but it could be also mul,sub,xor 
-                tmp = str(self.seed)[self.c] + str(self.seed)[self.a]
-                tmp = (self.seed%(10**(len(str(self.seed))-1)))*10 + tmp
-                return tmp
-            else:
-                #TODO 
-                #throw new error
-                pass
+        x = list(x)
+        if(len(x)) >= max(self.a, self.c):
+            point = (x[self.c] * x[self.a] )%self.modulo
+            x.remove(x[0])
+            x.append(point)
+            return (point,x)
+            
         else:
-            if(len(str(x)) >= max(self.a, self.c)):
-                tmp = str(x)[self.c] + str(x)[self.a]
-                tmp = (x%(10**(len(str(x))-1)))*10 + tmp
-                return tmp
-            else:
-                #TODO 
-                #throw new error
-                pass
+            raise CreatingGenerator4Exception()
+            
+class CreatingGenerator4Exception(Exception):
+    def __init__(self):
+        super().__init__("k or j is greater than seed")

@@ -2,6 +2,8 @@ import pygame
 from Points import Points
 from pygame.locals import *
 
+from Gui import Gui
+
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
@@ -48,7 +50,7 @@ class Main():
         pygame.display.set_mode((800,600), OPENGL|DOUBLEBUF)
         pygame.display.set_caption("Pseudo Random Number Generator")
         
-        gluPerspective(90,(800/600),0.1,2000.0) # to 45 i 50.0 do zmiany
+        gluPerspective(100,(800/600),0.1,2000.0) # to 45 i 50.0 do zmiany
         glTranslatef(-200,-100,-500) # byc może to też do zmiany 
         glEnable(GL_DEPTH_TEST)
         # y - 50 x - 50 z -50 
@@ -141,11 +143,15 @@ class Main():
             
     
 if(__name__ == "__main__"):
+    g = Gui()
+    tmp = g.run()
     # self, amount, option, modulo, a, c, seed
+    
+    #TODO fix forced exit 
     points = []
-    p = Points(100,4,257,75, 74, 2137)
+    p = Points(100,tmp[0],tmp[2],tmp[3],tmp[4],tmp[1])
     points = p.getPointsArray()
-    #print(points)
+    print(points)
     main = Main(points)
     
     main.run()
