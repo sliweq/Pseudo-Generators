@@ -1,15 +1,20 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter.messagebox import showerror
+from SettingsGui import SettingsGui
 
+from Settings import Settings
 
 class Gui():
     def __init__(self):
         self.window = tk.Tk()
+        
+        self.settings = Settings()
+        
         self.window.geometry("400x400")
         self.window.title("Initial Settings")
         self.window.resizable(False,False)
-        self.window.attributes('-topmost', 1)
+        #self.window.attributes('-topmost', 1)
         
         self.generators_names = ["Linear congruential","Middle square","Lehmer","Lagged Fibonacci"]
         self.describsions = [["seed","modulo-m","multiplier-a","increment-c"],["seed","","number of digits - a",""],["seed","modulo-m","multiplier-a",""],["seed","modulo-m","j","k"]]
@@ -22,12 +27,14 @@ class Gui():
         self.modulo_label = ttk.Label(self.window, text=f"{self.selecte_description[1]}")
         self.a_label = ttk.Label(self.window, text=f"{self.selecte_description[2]}")
         self.c_label = ttk.Label(self.window, text=f"{self.selecte_description[3]}") 
+        self.empty_label = ttk.Label(self.window, text="")
         
         self.generator_label.grid(column=0, row=0, padx=10,pady=10)
         self.seed_label.grid(column=0, row=1, padx=10,pady=10)
         self.modulo_label.grid(column=0, row=2, padx=10,pady=10)
         self.a_label.grid(column=0, row=3, padx=10, pady=10)
         self.c_label.grid(column=0, row=4,padx=10,pady=10)
+        self.empty_label.grid(column=0, row=6,padx=10,pady=10)
     
     def entrences(self):
         self.seed_entry = tk.Entry(self.window)
@@ -42,6 +49,7 @@ class Gui():
         
     def combo_box(self):
         self.generator_box = tk.StringVar()
+        self.generator_box.set(self.generators_names[0])
         self.generators_cb = ttk.Combobox(self.window, textvariable=self.generator_box)
 
         self.generators_cb['values'] = self.generators_names
@@ -52,6 +60,9 @@ class Gui():
     def button(self):
         self.generate_button = ttk.Button(self.window, text="Generate", command=self.action_button)
         self.generate_button.grid(column=0, row=5,padx=10,pady=10,columnspan=3) # sticky="WENS"
+        
+        self.settings_button = ttk.Button(self.window, text="Settings",command=self.action_settings_button)
+        self.settings_button.grid(column=0, row=7,padx=10,pady=10)
 
     def action_button(self):
         print(f"{self.generator_box.get()} {self.seed_entry.get()} {self.a_entry.get()} {self.c_entry.get()}")
@@ -90,7 +101,7 @@ class Gui():
                         msg+= "Invalid A data type\n"
                         
                     if(self.check_data(self.c_entry.get())):
-                        if(int(self.c.get())<0):
+                        if(int(self.c_entry.get())<0):
                             msg += "C is less than zero\n"
                     else:
                         msg+= "Invalid C data type\n"
@@ -161,6 +172,9 @@ class Gui():
             return False
         return True
             
+    def action_settings_button(self):
+        sg = SettingsGui(self.window,self.settings)
+        sg.grab_set()
 
     def action_combobox(self,event):
         self.selecte_description = self.describsions[self.generators_names.index(self.generator_box.get())] 
@@ -183,8 +197,14 @@ class Gui():
         self.generators_cb.bind("<<ComboboxSelected>>",self.action_combobox)
         
         self.window.mainloop()
+        
+        
         return self.returning_value
 
-#TODO label with generators patterns
 #TODO simulation settings
+# simualtion settings
+# - points amount
+# - points/axis color
+# - speed of operation
+
 

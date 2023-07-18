@@ -37,8 +37,7 @@ class Main():
         glFlush()
     
     def drawPoints(self):
-        #glClear(GL_COLOR_BUFFER_BIT)
-        glColor3f(0.0, 1.0, 0.0) 
+        glColor3f(1.0, 0.0, 0.0) 
         glBegin(GL_POINTS)
         for point in self.points:
             glVertex3fv(point)    
@@ -82,13 +81,7 @@ class Main():
             
             pygame.display.flip()
             pygame.time.wait(10)
-            
-            # print(self.moves_x)
-            # print(self.moves_y)
-            # print(self.moves_z)
-            # print(self.rotate_x)
-            # print(self.rotate_y)
-            # print(self.rotate_z)
+
             
     
     def keyPressed(self,event):
