@@ -6,10 +6,10 @@ from SettingsGui import SettingsGui
 from Settings import Settings
 
 class Gui():
-    def __init__(self):
+    def __init__(self,settings):
         self.window = tk.Tk()
         
-        self.settings = Settings()
+        self.settings = settings
         
         self.window.geometry("400x400")
         self.window.title("Initial Settings")

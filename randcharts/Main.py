@@ -2,13 +2,13 @@ import pygame
 from Points import Points
 from pygame.locals import *
 
+from Settings import Settings
 from Gui import Gui
 
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
 class Main():
-    # parameters for pseudonumber generator is in file Points.py
     def __init__(self, points):
         self.points = points
         self.axiX = [(1000,0,0),(-1000,0,0)]
@@ -18,8 +18,7 @@ class Main():
         self.moves_x = 0
         self.moves_y = 0
         self.moves_z = 0
-        
-        self.rotate_x = 0 # chyba bedzie niezbyt uzywane
+       
         self.rotate_y = 0
         self.rotate_z = 0
         
@@ -49,13 +48,10 @@ class Main():
         pygame.display.set_mode((800,600), OPENGL|DOUBLEBUF)
         pygame.display.set_caption("Pseudo Random Number Generator")
         
-        gluPerspective(100,(800/600),0.1,2000.0) # to 45 i 50.0 do zmiany
-        glTranslatef(-200,-100,-500) # byc może to też do zmiany 
+        gluPerspective(100,(800/600),0.1,3000.0) 
+        glTranslatef(-200,-100,-500)
         glEnable(GL_DEPTH_TEST)
-        # y - 50 x - 50 z -50 
-        #glRotatef(1,3,2,2)
-        
-        
+                
         while True:
             
             for event in pygame.event.get():
@@ -136,7 +132,8 @@ class Main():
             
     
 if(__name__ == "__main__"):
-    g = Gui()
+    settings = Settings()
+    g = Gui(settings)
     tmp = g.run()
     
     if(tmp != None):
