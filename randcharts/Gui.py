@@ -201,10 +201,6 @@ class Gui():
         
         return self.returning_value
 
-#TODO simulation settings
-# simualtion settings
-# - points amount
-# - points/axis color
-# - speed of operation
+
 
 

@@ -1,11 +1,15 @@
 import tkinter as tk 
 from tkinter import ttk
+from tkinter.messagebox import showerror
+
 
 class SettingsGui(tk.Toplevel):
     def __init__(self, parent, settings):
         super().__init__(parent)
         
-        self.geometry('500x300')
+        self.settings = settings
+        
+        self.geometry('500x350')
         self.title('Simulation Settings')
         settings.set_points_amount(210)
         
@@ -19,6 +23,7 @@ class SettingsGui(tk.Toplevel):
         self.labels()
         self.speed_spinbox()
         self.colors_radio()
+        self.apply_button()
     
     def labels(self): 
         self.label_speed = ttk.Label(self,text="Speed")
@@ -53,10 +58,9 @@ class SettingsGui(tk.Toplevel):
         self.spinbox_3 = ttk.Spinbox(self,from_=500,to=5000,increment=500,textvariable=self.current_value_3,wrap=True)
         self.spinbox_3.grid(column=1, row=2, padx=10,pady=10)
         
-        #0-white 1-green 2-yellow 3-red 4-blue 5-purple
     def colors_radio(self):
         colors = (("White",0),("Green",1),("Yellow",2),("Red",3),("Blue",4),("Purple",5))
-        selected_color = tk.StringVar()
+        self.selected_color = tk.StringVar()
         
         r = 3
         c = 1
@@ -66,14 +70,63 @@ class SettingsGui(tk.Toplevel):
                 c = 1
                 r += 1
                 
-            rb = ttk.Radiobutton(self,text=color[0], value=color[1], variable=selected_color, command= lambda:print(selected_color.get()))
+            rb = ttk.Radiobutton(self,text=color[0], value=color[1], variable=self.selected_color, command= lambda:print(self.selected_color.get()))
             rb.grid(column=c, row=r, padx=10,pady=10)
             c +=1
             
+        self.selected_color.set(colors[1][1]) 
         
-        selected_color.set(colors[1][1]) 
         
+        self.selected_color_2 = tk.StringVar()
+        
+        r = 5
+        c = 1
+        
+        for color in colors:
+            if(c == 4):
+                c = 1
+                r += 1
+                
+            rb = ttk.Radiobutton(self,text=color[0], value=color[1], variable=self.selected_color_2,command= lambda:print(self.selected_color_2.get()))
+            rb.grid(column=c, row=r, padx=10,pady=10)
+            c +=1
+        
+        self.selected_color_2.set(colors[0][1])
+       
+    def apply_button(self):
+        apply = tk.Button(self, text= "Apply", command=self.quit)
+        apply.grid(column=0, row=7, pady = 10, padx = 10)
         
     def quit(self):
-        #TODO sprawdzenie warptości w speed spinbox
-        pass
+        if(self.check_setting()):
+            self.apply_settings()
+            self.destroy()
+        else:
+            #TODO moze to wyswietylanie info 
+            showerror(title="Error", message="Error in values")
+        
+    def check_setting(self):
+        try:
+            int(self.current_value.get())
+            int(self.current_value_2.get())
+            int(self.current_value_3.get())
+        except:
+            return False
+        
+        if(int(self.current_value_3.get()) >5000 or int(self.current_value_3.get()) < 500 ):
+            return False
+        
+        if(int(self.current_value_2.get())>1000 or int(self.current_value_2.get()) < 50 ):
+            return False
+        
+        if( int(self.current_value.get()) >15 or  int(self.current_value.get()) < 1 ):
+            return False
+        return True 
+       
+    def apply_settings(self):
+        self.settings.set_points_color(int(self.selected_color.get()))
+        self.settings.set_axes_color(int(self.selected_color_2.get()))
+        
+        self.settings.set_speed(int(self.current_value.get()))
+        self.settings.set_points_amount(int(self.current_value_2.get()))
+        self.settings.set_axes_length(int(self.current_value_3.get()))

@@ -9,23 +9,25 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 
 class Main():
-    def __init__(self, points):
+    def __init__(self, points,settings):
+        self.settings = settings
         self.points = points
-        self.axiX = [(1000,0,0),(-1000,0,0)]
-        self.axiY = [(0,1000, 0),(0,-1000,0)]
-        self.axiZ = [(0,0,1000),(0,0,-1000)]
+        self.axiX = [((settings.axes_lenght/2),0,0),(-(settings.axes_lenght/2),0,0)]
+        self.axiY = [(0,(settings.axes_lenght/2), 0),(0,-(settings.axes_lenght/2),0)]
+        self.axiZ = [(0,0,(settings.axes_lenght/2)),(0,0,-(settings.axes_lenght/2))]
         
         self.moves_x = 0
         self.moves_y = 0
         self.moves_z = 0
        
+        self.rotate_x = 0
         self.rotate_y = 0
         self.rotate_z = 0
         
     
     def drawAxis(self):
         glBegin(GL_LINES)
-        glColor3f(1,1,1)
+        glColor3f(self.settings.color[self.settings.axes_color][0],self.settings.color[self.settings.axes_color][1],self.settings.color[self.settings.axes_color][2])
         glVertex3fv(self.axiX[0])
         glVertex3fv(self.axiX[1])
         glVertex3fv(self.axiY[0])
@@ -36,7 +38,7 @@ class Main():
         glFlush()
     
     def drawPoints(self):
-        glColor3f(1.0, 0.0, 0.0) 
+        glColor3f(self.settings.color[self.settings.points_color][0],self.settings.color[self.settings.points_color][1],self.settings.color[self.settings.points_color][2]) 
         glBegin(GL_POINTS)
         for point in self.points:
             glVertex3fv(point)    
@@ -76,7 +78,7 @@ class Main():
             
             
             pygame.display.flip()
-            pygame.time.wait(10)
+            pygame.time.wait(settings.speed)
 
             
     
@@ -105,6 +107,11 @@ class Main():
             self.rotate_y = 1
         if event.key == pygame.K_DOWN:
             self.rotate_y = -1
+            
+        if event.key == pygame.K_q:
+            pygame.quit()
+            quit()
+
 
     def keyRelased(self,event):
         # moves
@@ -138,10 +145,10 @@ if(__name__ == "__main__"):
     
     if(tmp != None):
         points = []
-        p = Points(100,tmp)
+        p = Points(settings.points_amount,tmp)
         points = p.getPointsArray()
         print(points)
-        main = Main(points)
+        main = Main(points,settings)
         
         main.run()
     
