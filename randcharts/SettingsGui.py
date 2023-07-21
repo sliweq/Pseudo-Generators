@@ -98,30 +98,48 @@ class SettingsGui(tk.Toplevel):
         apply.grid(column=0, row=7, pady = 10, padx = 10)
         
     def quit(self):
-        if(self.check_setting()):
+        tmp = self.check_setting()
+        if(tmp[0]):
             self.apply_settings()
             self.destroy()
         else:
             #TODO moze to wyswietylanie info 
-            showerror(title="Error", message="Error in values")
+            showerror(title="Error", message=tmp[1])
         
     def check_setting(self):
+        true_or_false = True
+        msg = ""
         try:
             int(self.current_value.get())
+        except:
+            true_or_false =  False
+            msg+= "Invalid speed data type\n"
+        try:
             int(self.current_value_2.get())
+        except:
+            true_or_false =  False
+            msg+= "Invalid points amount data type\n"
+        try:
             int(self.current_value_3.get())
         except:
-            return False
+            true_or_false =  False
+            msg+= "Invalid axes lenght data type\n"
+            
+        if(true_or_false):   
+            if(int(self.current_value_3.get()) >5000 or int(self.current_value_3.get()) < 500 ):
+                true_or_false =  False
+                msg+="Axes lenght is greater than 5000 or less than 500\n"
+            
+            if(int(self.current_value_2.get())>1000 or int(self.current_value_2.get()) < 50 ):
+                true_or_false =  False
+                msg += "Points amount is greater than 1000 or less than 50\n"
+            
+            if( int(self.current_value.get()) >15 or  int(self.current_value.get()) < 1 ):
+                true_or_false =  False
+                msg += "Speed is greater than 15 or less than 1"
         
-        if(int(self.current_value_3.get()) >5000 or int(self.current_value_3.get()) < 500 ):
-            return False
-        
-        if(int(self.current_value_2.get())>1000 or int(self.current_value_2.get()) < 50 ):
-            return False
-        
-        if( int(self.current_value.get()) >15 or  int(self.current_value.get()) < 1 ):
-            return False
-        return True 
+        return (true_or_false, msg)
+    
        
     def apply_settings(self):
         self.settings.set_points_color(int(self.selected_color.get()))
